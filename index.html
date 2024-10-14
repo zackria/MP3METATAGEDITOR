@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP3 META TAG EDITOR</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            padding: 20px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MP3 Metadata Editor</h1>
+        <button id="selectFolderBtn">Select Folder</button>
+        <button id="refreshFolderBtn" disabled>Refresh</button> <!-- Refresh Button -->
+
+        <div id="folderPath"></div>
+
+        <h2>Files in Selected Folder</h2>
+        <table id="metadataTable">
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Metadata</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <h2>Remove Text from Metadata</h2>
+        <label for="removeText">Text to remove:</label>
+        <input type="text" id="removeText">
+        <button id="removeTextBtn">Remove Text</button>
+        <div id="removeResult"></div>
+    </div>
+
+    <script>
+        const selectFolderBtn = document.getElementById('selectFolderBtn');
+        const refreshFolderBtn = document.getElementById('refreshFolderBtn');
+        const metadataTable = document.getElementById('metadataTable').querySelector('tbody');
+        const folderPathDiv = document.getElementById('folderPath');
+        const removeTextBtn = document.getElementById('removeTextBtn');
+        const removeResultDiv = document.getElementById('removeResult');
+        let currentFolder = '';
+        let filesList = [];
+
+                // Function to update the metadata table with file details
+                async function updateMetadataTable(folder) {
+                    if (folder) {
+                        folderPathDiv.textContent = `Selected Folder: ${folder}`;
+                        filesList=[];
+                        currentFolder = folder;
+                        const metadataList = await window.electronAPI.scanFolder(folder);
+                        metadataTable.innerHTML = '';  // Clear the table before adding new entries
+                        metadataList.forEach(item => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `<td>${item.file}</td><td>${JSON.stringify(item.metadata || item.error)}</td>`;
+                            filesList.push(item.file);
+                            metadataTable.appendChild(row);
+                        });
+                    }
+                }
+
+       // Select Folder button click handler
+        selectFolderBtn.addEventListener('click', async () => {
+            try {
+                const folder = await window.electronAPI.selectFolder();
+                await updateMetadataTable(folder);
+                refreshFolderBtn.disabled = false;  // Enable the refresh button after selecting a folder
+            } catch (error) {
+                console.error('Error selecting folder:', error);
+            }
+        });
+
+           // Refresh Folder button click handler
+           refreshFolderBtn.addEventListener('click', async () => {
+            if (currentFolder) {
+                await updateMetadataTable(currentFolder);  // Refresh the contents of the currently selected folder
+            }
+        });
+
+        removeTextBtn.addEventListener('click', async () => {
+            const textToRemove = document.getElementById('removeText').value;
+            if (currentFolder && textToRemove) {
+                const filePath = `${currentFolder}`; // Example file. Adjust as needed.
+                while(filesList.length > 0) {
+                    const file = filesList.pop();
+                    const result = await window.electronAPI.removeText(filePath + '/' + file, textToRemove);
+                    removeResultDiv.textContent = result;
+                }
+                await updateMetadataTable(currentFolder); // Refresh the contents of the currently selected folder
+            } else {
+                removeResultDiv.textContent = 'Please select a folder and enter text to remove.';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+{
+  "name": "MP3METATAGEDITOR",
+  "version": "1.0.0",
+  "description": "MP3 META TAG EDITOR",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "keywords": [],
+  "author": "Zack Dawood",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^32.2.0",
+    "music-metadata": "^10.5.1",
+    "node-id3": "^0.2.6"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "7.4.0",
+    "@electron-forge/maker-deb": "7.4.0",
+    "@electron-forge/maker-rpm": "7.4.0",
+    "@electron-forge/maker-squirrel": "7.4.0",
+    "@electron-forge/maker-zip": "7.4.0",
+    "@electron-forge/maker-dmg": "7.4.0",
+    "@electron-forge/maker-wix": "7.4.0",
+    "electron": "31.1.0",
+    "electron-squirrel-startup": "1.0.1",
+    "electron-builder": "24.13.3",
+    "electron-updater": ">=6.3.0-alpha.6",
+    "electron-reload": "2.0.0-alpha.1"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {"icon": "assets/MP3METATAGEDITOR.png"},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "ZFloatTimer",
+            "authors": "Zack Dawood",
+            "description": "MP3 META TAG EDITOR",
+            "setupIcon": "assets/MP3METATAGEDITOR.ico"
+
+
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "config": {
+            "name": "ZFloatTimer",
+            "authors": "Zack Dawood",
+            "description": "MP3 META TAG EDITOR",
+            "setupIcon": "assets/MP3METATAGEDITOR.ico"
+
+
+          },
+          "platforms": [
+            "darwin"
+          ]
+          
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {
+             "options": {
+            "icon": "assets/MP3METATAGEDITOR.png"
+          }}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        },{
+          "name": "@electron-forge/maker-dmg",
+          "config": {
+            "icon": "assets/MP3METATAGEDITOR.icns"
+          }
+        },{
+          "name": "@electron-forge/maker-wix",
+          "config": {
+            "icon": "assets/MP3METATAGEDITOR.ico"
+          }
+        }
+      ]
+    }
+  }
+}
