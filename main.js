@@ -150,6 +150,12 @@ function removeTextFromTags(tags, textToRemove) {
 }
 
 // Helper function to check if an object is an array of objects
+/**
+ * Checks if the input is an array where every element is a non-null object.
+ *
+ * @param {any} input - The input to check.
+ * @returns {boolean} - Returns true if the input is an array of non-null objects, otherwise false.
+ */
 function isObjectArray(input) {
   if (Array.isArray(input)) {
     return input.every((item) => typeof item === "object" && item !== null);
@@ -159,6 +165,12 @@ function isObjectArray(input) {
 
 // Handle text removal from metadata
 ipcMain.handle("remove-text", (event, filePath, textToRemove) => {
+  /**
+   * Reads the ID3 tags from the specified file.
+   *
+   * @param {string} filePath - The path to the file from which to read the ID3 tags.
+   * @returns {Object} The ID3 tags of the file.
+   */
   let tags = nodeID3.read(filePath);
 
   if (!tags) {
