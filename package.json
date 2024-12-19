@@ -9,7 +9,7 @@
     "make": "electron-forge make"
   },
   "keywords": [],
-  "author": "Zack Dawood",
+  "author": "ZackDawood",
   "license": "ISC",
   "dependencies": {
     "electron": "^32.2.0",
