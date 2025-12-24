@@ -171,6 +171,14 @@ ipcMain.handle("remove-text", (event, filePath, textToRemove) => {
    * @param {string} filePath - The path to the file from which to read the ID3 tags.
    * @returns {Object} The ID3 tags of the file.
    */
+
+  const options = {
+    include: [], // only read the specified tags (default: all)
+    exclude: [], // don't read the specified tags (default: [])
+    onlyRaw: false, // only return raw object (default: false)
+    noRaw: false, // don't generate raw object (default: false)
+  };
+
   let tags = nodeID3.read(filePath);
 
   if (!tags) {
